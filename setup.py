@@ -1,12 +1,13 @@
 from setuptools import setup, find_packages
-install_requires = [
-    'omc>0.0.15'
-]
 
+install_requires = [
+    'omc>=0.2.1',
+    'kubernetes>=11.0.0',
+]
 
 setup(
     name='omc-kube',
-    version="0.0.1",
+    version="0.0.2",
     description='kubenetes plugin for omc',
     license='MIT',
     author='Lu Ganlin',
