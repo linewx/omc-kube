@@ -7,7 +7,7 @@ install_requires = [
 
 setup(
     name='omc-kube',
-    version="0.0.2",
+    version="0.0.3",
     description='kubenetes plugin for omc',
     license='MIT',
     author='Lu Ganlin',
