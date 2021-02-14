@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 install_requires = [
-    'omc>=0.2.1',
+    'omc>=0.2.2',
     'kubernetes>=11.0.0',
 ]
 

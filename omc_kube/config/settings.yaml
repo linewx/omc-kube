@@ -1,0 +1,3 @@
+default:
+  omc_kube_config_dir: "@format {this.CONFIG_DIR}/kube"
+  omc_kube_cache_dir: "@format {this.CACHE_DIR}/kube"
