@@ -14,6 +14,6 @@ setup(
     author_email='linewx1981@gmail.com',
     url='https://github.com/linewx/omc-kube',
     packages=find_packages(),
-    # package_data={'omc.config': ['*.yaml'], 'omc.lib': ['**', '**/*', '**/**/*']},
+    package_data={'omc_kube.config': ['*.yaml'], 'omc_kube.lib': ['**', '**/*', '**/**/*']},
     install_requires=install_requires,
 )
