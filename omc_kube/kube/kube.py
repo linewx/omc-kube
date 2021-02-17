@@ -31,12 +31,10 @@ class Kube(Resource, CmdTaskMixin):
             else:
                 client = KubernetesClient()
 
-            self.context['common'] = {
-                'client': client
-            }
-        except:
+            self.context['common'] = {'client': client}
+        except Exception as e:
             # some action no need to create load config, get config action e.g.
-            pass
+            raise Exception('invalid kubenetes config')
 
 
 if __name__ == '__main__':
