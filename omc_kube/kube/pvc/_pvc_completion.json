@@ -1,0 +1,88 @@
+{
+  "apiVersion": "",
+  "kind": "",
+  "metadata": {
+    "annotations": "",
+    "clusterName": "",
+    "creationTimestamp": "",
+    "deletionGracePeriodSeconds": "",
+    "deletionTimestamp": "",
+    "finalizers": [
+      ""
+    ],
+    "generateName": "",
+    "generation": "",
+    "labels": "",
+    "managedFields": [
+      {
+        "apiVersion": "",
+        "fieldsType": "",
+        "fieldsV1": "",
+        "manager": "",
+        "operation": "",
+        "time": ""
+      }
+    ],
+    "name": "",
+    "namespace": "",
+    "ownerReferences": [
+      {
+        "apiVersion": "",
+        "blockOwnerDeletion": "",
+        "controller": "",
+        "kind": "",
+        "name": "",
+        "uid": ""
+      }
+    ],
+    "resourceVersion": "",
+    "selfLink": "",
+    "uid": ""
+  },
+  "spec": {
+    "accessModes": [
+      ""
+    ],
+    "dataSource": {
+      "apiGroup": "",
+      "kind": "",
+      "name": ""
+    },
+    "resources": {
+      "limits": "",
+      "requests": ""
+    },
+    "selector": {
+      "matchExpressions": [
+        {
+          "key": "",
+          "operator": "",
+          "values": [
+            ""
+          ]
+        }
+      ],
+      "matchLabels": ""
+    },
+    "storageClassName": "",
+    "volumeMode": "",
+    "volumeName": ""
+  },
+  "status": {
+    "accessModes": [
+      ""
+    ],
+    "capacity": "",
+    "conditions": [
+      {
+        "lastProbeTime": "",
+        "lastTransitionTime": "",
+        "message": "",
+        "reason": "",
+        "status": "",
+        "type": ""
+      }
+    ],
+    "phase": ""
+  }
+}

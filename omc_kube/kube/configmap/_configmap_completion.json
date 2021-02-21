@@ -1,0 +1,45 @@
+{
+  "apiVersion": "",
+  "binaryData": "",
+  "data": "",
+  "immutable": "",
+  "kind": "",
+  "metadata": {
+    "annotations": "",
+    "clusterName": "",
+    "creationTimestamp": "",
+    "deletionGracePeriodSeconds": "",
+    "deletionTimestamp": "",
+    "finalizers": [
+      ""
+    ],
+    "generateName": "",
+    "generation": "",
+    "labels": "",
+    "managedFields": [
+      {
+        "apiVersion": "",
+        "fieldsType": "",
+        "fieldsV1": "",
+        "manager": "",
+        "operation": "",
+        "time": ""
+      }
+    ],
+    "name": "",
+    "namespace": "",
+    "ownerReferences": [
+      {
+        "apiVersion": "",
+        "blockOwnerDeletion": "",
+        "controller": "",
+        "kind": "",
+        "name": "",
+        "uid": ""
+      }
+    ],
+    "resourceVersion": "",
+    "selfLink": "",
+    "uid": ""
+  }
+}

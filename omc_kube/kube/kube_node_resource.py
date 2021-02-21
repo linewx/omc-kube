@@ -7,14 +7,14 @@ import pkg_resources
 from omc.core.decorator import filecache
 
 from omc.config import settings
+from omc.utils.object_utils import ObjectUtils
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
 
 from omc.common import CmdTaskMixin
 from omc.core.resource import Resource
-from omc.utils import utils
 from omc.utils.file_utils import make_directory
-from omc.utils.utils import get_obj_value, get_all_dict_Keys, set_obj_value, delete_obj_key
+# from omc.utils.utils import ObjectUtils.get_node, get_all_dict_Keys, set_obj_value, delete_obj_key
 
 from omc_kube.core import StrategicMergePatch
 
@@ -53,12 +53,12 @@ class KubeNodeResource(Resource, CmdTaskMixin):
             # namespace = self.client.get_namespace(self._get_kube_api_resource_type(), parent_resource)
 
             kube_resource_type = self._get_kube_resource_type()
-            completion_file_name = pkg_resources.resource_filename('omc_kube.%(kube_resource_type)s' % locals(), '_%(kube_resource_type)s_completion.json' % locals())
+            completion_file_name = pkg_resources.resource_filename('omc_kube.assets', '_%(kube_resource_type)s_completion.json' % locals())
             prompts = []
             # get_all_dict_Keys(result.to_dict(), prompts)
             with open(completion_file_name) as f:
                 result = json.load(f)
-                get_all_dict_Keys(result, prompts)
+                ObjectUtils.get_nodes(result, prompts)
                 results.extend(self._get_completion(prompts))
 
         return "\n".join(results)
@@ -77,9 +77,9 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         resource = self._get_one_resource_value()
 
         if not resource:
-            print(result)
+            print(ObjectUtils.format(result))
         else:
-            print(get_obj_value(result, resource))
+            print(ObjectUtils.format(ObjectUtils.get_node(result, resource)))
 
     def set(self):
         'update restore by configuration key'
@@ -91,7 +91,7 @@ class KubeNodeResource(Resource, CmdTaskMixin):
             namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
             result = self._read_namespaced_resource(resource, namespace)
             prompts = []
-            get_all_dict_Keys(result.to_dict(), prompts)
+            ObjectUtils.get_nodes(result.to_dict(), prompts)
             self._print_completion(prompts)
             return
 
@@ -101,10 +101,10 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         result = self._read_namespaced_resource(parent_resource, namespace)
         params = self._get_action_params()
         config_value = params[0]
-        orig_value = get_obj_value(result, config_key)
+        orig_value = ObjectUtils.get_node(result, config_key)
         # convert type
         config_value = type(orig_value)(config_value)
-        set_obj_value(result, config_key, config_value)
+        ObjectUtils.set_node(result, config_key, config_value)
 
         # todo: use apply instead once apply provided
         patch_func = getattr(self.client, 'patch_namespaced_' + self._get_kube_api_resource_type())
@@ -122,7 +122,7 @@ class KubeNodeResource(Resource, CmdTaskMixin):
             namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
             result = self._read_namespaced_resource(resource, namespace)
             prompts = []
-            get_all_dict_Keys(result.to_dict(), prompts)
+            ObjectUtils.get_nodes(result.to_dict(), prompts)
             self._print_completion(prompts)
             return
 
@@ -133,7 +133,7 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         result = json.loads(the_result.data.decode('UTF-8'))
         params = self._get_action_params()
         config_value = params[0] if len(params) > 0 else None
-        # orig_value = get_obj_value(result, config_key)
+        # orig_value = ObjectUtils.get_node(result, config_key)
         # # convert type
         # config_value = type(orig_value)(config_value)
         # set_obj_value(result, config_key, config_value)
@@ -166,8 +166,8 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         result = self._read_namespaced_resource(resource_name, namespace, _preload_content=False)
         stream = StringIO()
         the_result = json.loads(result.data.decode('UTF-8'))
-        delete_obj_key(the_result, 'metadata.creationTimestamp')
-        delete_obj_key(the_result, 'metadata.resourceVersion')
+        ObjectUtils.delete_node(the_result, 'metadata.creationTimestamp')
+        ObjectUtils.delete_node(the_result, 'metadata.resourceVersion')
         yaml = YAML()
         yaml.dump(the_result, stream)
         content = stream.getvalue()

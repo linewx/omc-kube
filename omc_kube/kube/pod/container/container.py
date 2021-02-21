@@ -5,6 +5,7 @@ from omc.core.decorator import filecache
 from omc.common import CmdTaskMixin
 
 from omc.core import Resource
+from omc.utils.object_utils import ObjectUtils
 
 
 class Container(Resource, CmdTaskMixin):
@@ -33,7 +34,7 @@ class Container(Resource, CmdTaskMixin):
             namespace = self.client.get_namespace('pod', pod_name)
             result = self.client.read_namespaced_pod(pod_name, namespace)
             # for one_container in result.spec.containers:
-            results.extend(self._get_completion([(one.name,one.image) for one in result.spec.containers], False))
+            results.extend(self._get_completion([(one.get('name'),one.get('image')) for one in ObjectUtils.get_node(result, 'spec.containers')], False))
 
         return '\n'.join(results)
 

@@ -5,36 +5,7 @@ from kubernetes import client, config
 from omc.common import CmdTaskMixin
 from functools import wraps
 
-
-def get_obj_value(obj, key):
-    # e.g. get pod.data.ips[0]
-    if not key:
-        return None
-
-    first_attr, others, delimiter = extract_first_attr(key)
-
-    if first_attr:
-        if isinstance(obj, dict):
-            first_value = obj.get(first_attr)
-        elif isinstance(obj, list):
-            first_value = obj[int(first_attr)]
-        else:
-            first_value = getattr(obj, first_attr)
-
-        if not others:
-            return first_value
-
-        else:
-            return get_obj_value(first_value, others)
-
-
-def extract_first_attr(key):
-    key = key.strip('[].')
-    for index in range(0, len(key)):
-        if key[index] in '[].':
-            return key[:index], key[index:].strip('[].'), key[index]
-
-    return key, None, None
+from omc.utils.object_utils import ObjectUtils
 
 
 class KubernetesClient(CmdTaskMixin):
@@ -71,8 +42,8 @@ class KubernetesClient(CmdTaskMixin):
         list_namespaces = getattr(self, "list_%s_for_all_namespaces" % resource_type)
         all_namespaces = list_namespaces()
         for one in all_namespaces.get('items'):
-            if utils.get_obj_value(one, 'metadata.name') == resource_name:
-                return utils.get_obj_value(one, 'metadata.namespace')
+            if ObjectUtils.get_node(one, 'metadata.name') == resource_name:
+                return ObjectUtils.get_node(one, 'metadata.namespace')
 
     ##################################
     ###### kubectl impl ##############
@@ -110,13 +81,13 @@ class KubernetesClient(CmdTaskMixin):
         cmd = "kubectl %(config)s cp %(container_options)s %(local_dir)s %(namespace)s/%(resource_name)s:%(remote_dir)s" % locals()
         self.run_cmd(cmd)
 
-    def exec(self, resource_type, resource_name, namespace, command, container=None, stdin=True):
+    def exec(self, resource_type, resource_name, namespace, command, container=None, stdin=True, capture_output=False):
         resource_type = self.reconcile_resource_type(resource_type)
         config = ' --kubeconfig %s ' % self.config_file if self.config_file else ''
         interactive_option = '-it' if stdin else ''
         container_options = '' if not container else '-c ' + container
         cmd = 'kubectl %(config)s exec %(interactive_option)s %(resource_type)s/%(resource_name)s %(container_options)s --namespace %(namespace)s -- %(command)s' % locals()
-        self.run_cmd(cmd)
+        return self.run_cmd(cmd, capture_output=capture_output)
 
     def get(self, resource_type, resource_name='', namespace='all', output='yaml'):
         resource_type = self.reconcile_resource_type(resource_type)
@@ -244,149 +215,6 @@ class StrategicMergePatch:
 
         }
 
-    def delete_obj_key(self, obj, key):
-        if not key:
-            return None
-
-        first_attr, others, delimiter = self.extract_first_attr(key)
-
-        if not others:
-            # do set value
-
-            if first_attr:
-                if isinstance(obj, dict):
-                    # obj.pop(key, None)
-                    del obj[key]
-                elif isinstance(obj, list):
-                    del obj[int(first_attr)]
-                else:
-                    try:
-                        delattr(obj, first_attr)
-                    except:
-                        setattr(obj, first_attr, None)
-
-                return
-        else:
-            # do get value
-
-            if first_attr:
-                if isinstance(obj, dict):
-                    first_value = obj.get(first_attr)
-                elif isinstance(obj, list):
-                    first_value = obj[int(first_attr)]
-                else:
-                    first_value = getattr(obj, first_attr)
-
-                self.delete_obj_key(first_value, others)
-
-    def set_obj_value(self, obj, key, value):
-        # e.g. get pod.data.ips[0]
-        if not key:
-            return None
-
-        first_attr, others, delimiter = self.extract_first_attr(key)
-
-        if not others:
-            # do set value
-
-            if first_attr:
-                if isinstance(obj, dict):
-                    obj[first_attr] = value
-                elif isinstance(obj, list):
-                    obj[int(first_attr)] = value
-                else:
-                    setattr(obj, first_attr, value)
-
-                return
-        else:
-            # do get value
-
-            if first_attr:
-                if isinstance(obj, dict):
-                    first_value = obj.get(first_attr)
-                elif isinstance(obj, list):
-                    first_value = obj[int(first_attr)]
-                else:
-                    first_value = getattr(obj, first_attr)
-
-                self.set_obj_value(first_value, others, value)
-
-    def get_obj_value(self, obj, key):
-        # e.g. get pod.data.ips[0]
-        if not key:
-            return None
-
-        first_attr, others, delimiter = self.extract_first_attr(key)
-
-        if first_attr:
-            if isinstance(obj, dict):
-                first_value = obj.get(first_attr)
-            elif isinstance(obj, list):
-                first_value = obj[int(first_attr)]
-            else:
-                first_value = getattr(obj, first_attr)
-
-            if not others:
-                return first_value
-
-            else:
-                return self.get_obj_value(first_value, others)
-
-    def extract_first_attr(self, key):
-        key = key.strip('[].')
-        for index in range(0, len(key)):
-            if key[index] in '[].':
-                return key[:index], key[index:].strip('[].'), key[index]
-
-        return key, None, None
-
-    def get_all_dict_Keys(self, obj, paths=[]):
-        if isinstance(obj, dict):
-            for k, v in obj.items():
-                paths.append(k)
-                subpaths = []
-                self.get_all_dict_Keys(v, subpaths)
-                paths.extend([k + one if one.startswith('[') else k + '.' + one for one in subpaths])
-        elif isinstance(obj, list):
-            paths.append('[0]')
-            subpaths = []
-            self.get_all_dict_Keys(obj[0], subpaths)
-            paths.extend(['[0].' + one for one in subpaths])
-
-    def build_object(self, key, value, init_object={}):
-        # todo: to support array
-        first, others, delimiter = self.extract_first_attr(key)
-
-        if others is None:
-            # build_object('a', 'b')
-            if isinstance(init_object, list):
-                index = int(first)
-                if index < len(init_object):
-                    init_object[index] = value
-                elif index == len(init_object):
-                    init_object.append(value)
-            else:
-                init_object[key] = value
-            return init_object
-        elif delimiter == '.':
-            # build_object('a.b', 'c')
-            return {first: self.build_object(others, value, {})}
-        else:
-            if isinstance(init_object, list):
-                index = int(first)
-                if index < len(init_object):
-                    init_object[int(first)] = self.build_object(others, value, {})
-                    return init_object
-                elif index == len(init_object):
-                    init_object.append(self.build_object(others, value, {}))
-                    return init_object
-                else:
-                    raise Exception('out of range')
-            else:
-                # build_object('a[0].b', 'c')
-                init_object = {first: self.build_object(others, value, [])}
-                return init_object
-
     def flatten_key(self, key):
         return re.sub("\[\d+\]", '', key)
 
@@ -441,7 +269,7 @@ class StrategicMergePatch:
 
             if current_flatten_path in self.api_spec:
                 # for array, we have stratgic merge rule
-                current_value = self.get_obj_value(origin, current_key_path)
+                current_value = ObjectUtils.get_node(origin, current_key_path)
 
                 merge_key = self.api_spec[current_flatten_path]['x-kubernetes-patch-merge-key']
                 patch_strategy = self.api_spec[current_flatten_path]['x-kubernetes-patch-strategy']
@@ -483,7 +311,7 @@ class StrategicMergePatch:
 
             else:
                 # if no merge rule, merge normally
-                current_value = self.get_obj_value(origin, current_key_path)
+                current_value = ObjectUtils.get_node(origin, current_key_path)
                 current_value = current_value if current_value else []
                 current_value.insert(index, the_value)
 

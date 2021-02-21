@@ -1,0 +1,86 @@
+{
+  "apiVersion": "",
+  "kind": "",
+  "metadata": {
+    "annotations": "",
+    "clusterName": "",
+    "creationTimestamp": "",
+    "deletionGracePeriodSeconds": "",
+    "deletionTimestamp": "",
+    "finalizers": [
+      ""
+    ],
+    "generateName": "",
+    "generation": "",
+    "labels": "",
+    "managedFields": [
+      {
+        "apiVersion": "",
+        "fieldsType": "",
+        "fieldsV1": "",
+        "manager": "",
+        "operation": "",
+        "time": ""
+      }
+    ],
+    "name": "",
+    "namespace": "",
+    "ownerReferences": [
+      {
+        "apiVersion": "",
+        "blockOwnerDeletion": "",
+        "controller": "",
+        "kind": "",
+        "name": "",
+        "uid": ""
+      }
+    ],
+    "resourceVersion": "",
+    "selfLink": "",
+    "uid": ""
+  },
+  "subsets": [
+    {
+      "addresses": [
+        {
+          "hostname": "",
+          "ip": "",
+          "nodeName": "",
+          "targetRef": {
+            "apiVersion": "",
+            "fieldPath": "",
+            "kind": "",
+            "name": "",
+            "namespace": "",
+            "resourceVersion": "",
+            "uid": ""
+          }
+        }
+      ],
+      "notReadyAddresses": [
+        {
+          "hostname": "",
+          "ip": "",
+          "nodeName": "",
+          "targetRef": {
+            "apiVersion": "",
+            "fieldPath": "",
+            "kind": "",
+            "name": "",
+            "namespace": "",
+            "resourceVersion": "",
+            "uid": ""
+          }
+        }
+      ],
+      "ports": [
+        {
+          "appProtocol": "",
+          "name": "",
+          "port": "",
+          "protocol": ""
+        }
+      ]
+    }
+  ]
+}

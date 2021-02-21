@@ -1,0 +1,112 @@
+{
+  "apiVersion": "",
+  "kind": "",
+  "metadata": {
+    "annotations": "",
+    "clusterName": "",
+    "creationTimestamp": "",
+    "deletionGracePeriodSeconds": "",
+    "deletionTimestamp": "",
+    "finalizers": [
+      ""
+    ],
+    "generateName": "",
+    "generation": "",
+    "labels": "",
+    "managedFields": [
+      {
+        "apiVersion": "",
+        "fieldsType": "",
+        "fieldsV1": "",
+        "manager": "",
+        "operation": "",
+        "time": ""
+      }
+    ],
+    "name": "",
+    "namespace": "",
+    "ownerReferences": [
+      {
+        "apiVersion": "",
+        "blockOwnerDeletion": "",
+        "controller": "",
+        "kind": "",
+        "name": "",
+        "uid": ""
+      }
+    ],
+    "resourceVersion": "",
+    "selfLink": "",
+    "uid": ""
+  },
+  "spec": {
+    "allocateLoadBalancerNodePorts": "",
+    "clusterIP": "",
+    "clusterIPs": [
+      ""
+    ],
+    "externalIPs": [
+      ""
+    ],
+    "externalName": "",
+    "externalTrafficPolicy": "",
+    "healthCheckNodePort": "",
+    "ipFamilies": [
+      ""
+    ],
+    "ipFamilyPolicy": "",
+    "loadBalancerIP": "",
+    "loadBalancerSourceRanges": [
+      ""
+    ],
+    "ports": [
+      {
+        "appProtocol": "",
+        "name": "",
+        "nodePort": "",
+        "port": "",
+        "protocol": "",
+        "targetPort": ""
+      }
+    ],
+    "publishNotReadyAddresses": "",
+    "selector": "",
+    "sessionAffinity": "",
+    "sessionAffinityConfig": {
+      "clientIP": {
+        "timeoutSeconds": ""
+      }
+    },
+    "topologyKeys": [
+      ""
+    ],
+    "type": ""
+  },
+  "status": {
+    "conditions": [
+      {
+        "lastTransitionTime": "",
+        "message": "",
+        "observedGeneration": "",
+        "reason": "",
+        "status": "",
+        "type": ""
+      }
+    ],
+    "loadBalancer": {
+      "ingress": [
+        {
+          "hostname": "",
+          "ip": "",
+          "ports": [
+            {
+              "error": "",
+              "port": "",
+              "protocol": ""
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

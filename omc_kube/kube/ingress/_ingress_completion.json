@@ -1,0 +1,111 @@
+{
+  "apiVersion": "",
+  "kind": "",
+  "metadata": {
+    "annotations": "",
+    "clusterName": "",
+    "creationTimestamp": "",
+    "deletionGracePeriodSeconds": "",
+    "deletionTimestamp": "",
+    "finalizers": [
+      ""
+    ],
+    "generateName": "",
+    "generation": "",
+    "labels": "",
+    "managedFields": [
+      {
+        "apiVersion": "",
+        "fieldsType": "",
+        "fieldsV1": "",
+        "manager": "",
+        "operation": "",
+        "time": ""
+      }
+    ],
+    "name": "",
+    "namespace": "",
+    "ownerReferences": [
+      {
+        "apiVersion": "",
+        "blockOwnerDeletion": "",
+        "controller": "",
+        "kind": "",
+        "name": "",
+        "uid": ""
+      }
+    ],
+    "resourceVersion": "",
+    "selfLink": "",
+    "uid": ""
+  },
+  "spec": {
+    "defaultBackend": {
+      "resource": {
+        "apiGroup": "",
+        "kind": "",
+        "name": ""
+      },
+      "service": {
+        "name": "",
+        "port": {
+          "name": "",
+          "number": ""
+        }
+      }
+    },
+    "ingressClassName": "",
+    "rules": [
+      {
+        "host": "",
+        "http": {
+          "paths": [
+            {
+              "backend": {
+                "resource": {
+                  "apiGroup": "",
+                  "kind": "",
+                  "name": ""
+                },
+                "service": {
+                  "name": "",
+                  "port": {
+                    "name": "",
+                    "number": ""
+                  }
+                }
+              },
+              "path": "",
+              "pathType": ""
+            }
+          ]
+        }
+      }
+    ],
+    "tls": [
+      {
+        "hosts": [
+          ""
+        ],
+        "secretName": ""
+      }
+    ]
+  },
+  "status": {
+    "loadBalancer": {
+      "ingress": [
+        {
+          "hostname": "",
+          "ip": "",
+          "ports": [
+            {
+              "error": "",
+              "port": "",
+              "protocol": ""
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

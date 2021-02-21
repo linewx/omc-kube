@@ -1,0 +1,78 @@
+{
+  "action": "",
+  "apiVersion": "",
+  "deprecatedCount": "",
+  "deprecatedFirstTimestamp": "",
+  "deprecatedLastTimestamp": "",
+  "deprecatedSource": {
+    "component": "",
+    "host": ""
+  },
+  "eventTime": "",
+  "kind": "",
+  "metadata": {
+    "annotations": "",
+    "clusterName": "",
+    "creationTimestamp": "",
+    "deletionGracePeriodSeconds": "",
+    "deletionTimestamp": "",
+    "finalizers": [
+      ""
+    ],
+    "generateName": "",
+    "generation": "",
+    "labels": "",
+    "managedFields": [
+      {
+        "apiVersion": "",
+        "fieldsType": "",
+        "fieldsV1": "",
+        "manager": "",
+        "operation": "",
+        "time": ""
+      }
+    ],
+    "name": "",
+    "namespace": "",
+    "ownerReferences": [
+      {
+        "apiVersion": "",
+        "blockOwnerDeletion": "",
+        "controller": "",
+        "kind": "",
+        "name": "",
+        "uid": ""
+      }
+    ],
+    "resourceVersion": "",
+    "selfLink": "",
+    "uid": ""
+  },
+  "note": "",
+  "reason": "",
+  "regarding": {
+    "apiVersion": "",
+    "fieldPath": "",
+    "kind": "",
+    "name": "",
+    "namespace": "",
+    "resourceVersion": "",
+    "uid": ""
+  },
+  "related": {
+    "apiVersion": "",
+    "fieldPath": "",
+    "kind": "",
+    "name": "",
+    "namespace": "",
+    "resourceVersion": "",
+    "uid": ""
+  },
+  "reportingController": "",
+  "reportingInstance": "",
+  "series": {
+    "count": "",
+    "lastObservedTime": ""
+  },
+  "type": ""
+}

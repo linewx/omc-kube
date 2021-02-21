@@ -31,15 +31,15 @@ class K8sSpec:
                          '_definition': one_property_value
                          }
                 elif one_property_value.get('type') == 'array':
-                    items =  one_property_value['items']
-                    if '$ref' in  items:
+                    items = one_property_value['items']
+                    if '$ref' in items:
                         results[one_property_name] = {
                             **self.gen_definition_tree(items['$ref'].replace('#/definitions/', '')),
-                            '_definition' : one_property_value
-                            }
+                            '_definition': one_property_value
+                        }
                     else:
                         results[one_property_name] = {
-                            '_definition' : one_property_value
+                            '_definition': one_property_value
                         }
                 else:
                     results[one_property_name] = {
@@ -57,10 +57,11 @@ class K8sSpec:
         if properties:
             for one_property_name, one_property_value in properties.items():
                 if '$ref' in one_property_value:
-                    results[one_property_name] = self.gen_sample(one_property_value['$ref'].replace('#/definitions/', ''))
+                    results[one_property_name] = self.gen_sample(
+                        one_property_value['$ref'].replace('#/definitions/', ''))
                 elif one_property_value.get('type') == 'array':
-                    items =  one_property_value['items']
-                    if '$ref' in  items:
+                    items = one_property_value['items']
+                    if '$ref' in items:
                         results[one_property_name] = [self.gen_sample(items['$ref'].replace('#/definitions/', ''))]
 
                     else:
@@ -77,11 +78,23 @@ def pprint(obj):
 
 
 if __name__ == '__main__':
-    spec = K8sSpec('/Users/luganlin/git/mf/omc/omc/assets/k8s/swagger.json')
+    spec = K8sSpec('/Users/luganlin/git/omc-all/omc-kube/omc_kube/assets/swagger.json')
 
     # pprint(spec._get_one_definition_properties("io.k8s.api.apps.v1.Deployment"))
     # pprint(spec.gen_definition_tree("io.k8s.api.apps.v1.Deployment"))
-    resource = 'deployment'
-    with open('/Users/luganlin/git/mf/omc/omc/resources/kube/%s/_%s_completion.json' % (resource, resource), 'w') as f:
-        json.dump(spec.gen_sample("io.k8s.api.apps.v1.%s" % resource.capitalize()), f, indent=2)
+
+    resources = [('pod', 'io.k8s.api.core.v1.Pod'),
+                 ('pv', 'io.k8s.api.core.v1.PersistentVolume'),
+                 ('endpoints', 'io.k8s.api.core.v1.Endpoints'),
+                 ('ingress', 'io.k8s.api.networking.v1.Ingress'),
+                 ('deployment', 'io.k8s.api.apps.v1.Deployment'),
+                 ('pvc', 'io.k8s.api.core.v1.PersistentVolumeClaim'),
+                 ('configmap', 'io.k8s.api.core.v1.ConfigMap'),
+                 ('service', 'io.k8s.api.core.v1.Service'),
+                 ('event', 'io.k8s.api.events.v1.Event')]
+    # '/Users/luganlin/git/omc-all/omc-kube/omc_kube/kube/deployment/_deployment_completion.json'
+    for resource,name in resources:
+        with open('/Users/luganlin/git/omc-all/omc-kube/omc_kube/assets/_%s_completion.json' % (resource),
+                  'w') as f:
+            json.dump(spec.gen_sample(name), f, indent=2)
     # pprint(spec._get_one_definition_type("io.k8s.api.apps.v1.Deployment"))

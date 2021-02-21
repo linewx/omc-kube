@@ -1,0 +1,295 @@
+{
+  "apiVersion": "",
+  "kind": "",
+  "metadata": {
+    "annotations": "",
+    "clusterName": "",
+    "creationTimestamp": "",
+    "deletionGracePeriodSeconds": "",
+    "deletionTimestamp": "",
+    "finalizers": [
+      ""
+    ],
+    "generateName": "",
+    "generation": "",
+    "labels": "",
+    "managedFields": [
+      {
+        "apiVersion": "",
+        "fieldsType": "",
+        "fieldsV1": "",
+        "manager": "",
+        "operation": "",
+        "time": ""
+      }
+    ],
+    "name": "",
+    "namespace": "",
+    "ownerReferences": [
+      {
+        "apiVersion": "",
+        "blockOwnerDeletion": "",
+        "controller": "",
+        "kind": "",
+        "name": "",
+        "uid": ""
+      }
+    ],
+    "resourceVersion": "",
+    "selfLink": "",
+    "uid": ""
+  },
+  "spec": {
+    "accessModes": [
+      ""
+    ],
+    "awsElasticBlockStore": {
+      "fsType": "",
+      "partition": "",
+      "readOnly": "",
+      "volumeID": ""
+    },
+    "azureDisk": {
+      "cachingMode": "",
+      "diskName": "",
+      "diskURI": "",
+      "fsType": "",
+      "kind": "",
+      "readOnly": ""
+    },
+    "azureFile": {
+      "readOnly": "",
+      "secretName": "",
+      "secretNamespace": "",
+      "shareName": ""
+    },
+    "capacity": "",
+    "cephfs": {
+      "monitors": [
+        ""
+      ],
+      "path": "",
+      "readOnly": "",
+      "secretFile": "",
+      "secretRef": {
+        "name": "",
+        "namespace": ""
+      },
+      "user": ""
+    },
+    "cinder": {
+      "fsType": "",
+      "readOnly": "",
+      "secretRef": {
+        "name": "",
+        "namespace": ""
+      },
+      "volumeID": ""
+    },
+    "claimRef": {
+      "apiVersion": "",
+      "fieldPath": "",
+      "kind": "",
+      "name": "",
+      "namespace": "",
+      "resourceVersion": "",
+      "uid": ""
+    },
+    "csi": {
+      "controllerExpandSecretRef": {
+        "name": "",
+        "namespace": ""
+      },
+      "controllerPublishSecretRef": {
+        "name": "",
+        "namespace": ""
+      },
+      "driver": "",
+      "fsType": "",
+      "nodePublishSecretRef": {
+        "name": "",
+        "namespace": ""
+      },
+      "nodeStageSecretRef": {
+        "name": "",
+        "namespace": ""
+      },
+      "readOnly": "",
+      "volumeAttributes": "",
+      "volumeHandle": ""
+    },
+    "fc": {
+      "fsType": "",
+      "lun": "",
+      "readOnly": "",
+      "targetWWNs": [
+        ""
+      ],
+      "wwids": [
+        ""
+      ]
+    },
+    "flexVolume": {
+      "driver": "",
+      "fsType": "",
+      "options": "",
+      "readOnly": "",
+      "secretRef": {
+        "name": "",
+        "namespace": ""
+      }
+    },
+    "flocker": {
+      "datasetName": "",
+      "datasetUUID": ""
+    },
+    "gcePersistentDisk": {
+      "fsType": "",
+      "partition": "",
+      "pdName": "",
+      "readOnly": ""
+    },
+    "glusterfs": {
+      "endpoints": "",
+      "endpointsNamespace": "",
+      "path": "",
+      "readOnly": ""
+    },
+    "hostPath": {
+      "path": "",
+      "type": ""
+    },
+    "iscsi": {
+      "chapAuthDiscovery": "",
+      "chapAuthSession": "",
+      "fsType": "",
+      "initiatorName": "",
+      "iqn": "",
+      "iscsiInterface": "",
+      "lun": "",
+      "portals": [
+        ""
+      ],
+      "readOnly": "",
+      "secretRef": {
+        "name": "",
+        "namespace": ""
+      },
+      "targetPortal": ""
+    },
+    "local": {
+      "fsType": "",
+      "path": ""
+    },
+    "mountOptions": [
+      ""
+    ],
+    "nfs": {
+      "path": "",
+      "readOnly": "",
+      "server": ""
+    },
+    "nodeAffinity": {
+      "required": {
+        "nodeSelectorTerms": [
+          {
+            "matchExpressions": [
+              {
+                "key": "",
+                "operator": "",
+                "values": [
+                  ""
+                ]
+              }
+            ],
+            "matchFields": [
+              {
+                "key": "",
+                "operator": "",
+                "values": [
+                  ""
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "persistentVolumeReclaimPolicy": "",
+    "photonPersistentDisk": {
+      "fsType": "",
+      "pdID": ""
+    },
+    "portworxVolume": {
+      "fsType": "",
+      "readOnly": "",
+      "volumeID": ""
+    },
+    "quobyte": {
+      "group": "",
+      "readOnly": "",
+      "registry": "",
+      "tenant": "",
+      "user": "",
+      "volume": ""
+    },
+    "rbd": {
+      "fsType": "",
+      "image": "",
+      "keyring": "",
+      "monitors": [
+        ""
+      ],
+      "pool": "",
+      "readOnly": "",
+      "secretRef": {
+        "name": "",
+        "namespace": ""
+      },
+      "user": ""
+    },
+    "scaleIO": {
+      "fsType": "",
+      "gateway": "",
+      "protectionDomain": "",
+      "readOnly": "",
+      "secretRef": {
+        "name": "",
+        "namespace": ""
+      },
+      "sslEnabled": "",
+      "storageMode": "",
+      "storagePool": "",
+      "system": "",
+      "volumeName": ""
+    },
+    "storageClassName": "",
+    "storageos": {
+      "fsType": "",
+      "readOnly": "",
+      "secretRef": {
+        "apiVersion": "",
+        "fieldPath": "",
+        "kind": "",
+        "name": "",
+        "namespace": "",
+        "resourceVersion": "",
+        "uid": ""
+      },
+      "volumeName": "",
+      "volumeNamespace": ""
+    },
+    "volumeMode": "",
+    "vsphereVolume": {
+      "fsType": "",
+      "storagePolicyID": "",
+      "storagePolicyName": "",
+      "volumePath": ""
+    }
+  },
+  "status": {
+    "message": "",
+    "phase": "",
+    "reason": ""
+  }
+}
