@@ -1,5 +1,5 @@
 from omc.common import CmdTaskMixin
-from omc.resources.kube.kube_section_resource import KubeNodeResource
+from omc_kube.kube.kube_node_resource import KubeNodeResource
 
 
 class Node(KubeNodeResource, CmdTaskMixin):
