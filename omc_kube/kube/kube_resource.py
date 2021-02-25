@@ -2,6 +2,8 @@ import json
 import os
 from datetime import datetime
 import logging
+
+from omc.core import console
 from omc.core.decorator import filecache
 
 from omc.config import settings
@@ -69,9 +71,9 @@ class KubeResource(Resource, CmdTaskMixin):
                                                                               resource_name)
 
         # ret = self._list_resource_for_all_namespaces()
-        # print(ret)
+        # console.log(ret)
         result = self.client.get(self._get_kube_resource_type(), resource_name, namespace)
-        print(result)
+        console.log(result)
 
     def yaml(self):
         'get configuration in yaml format'
@@ -81,14 +83,14 @@ class KubeResource(Resource, CmdTaskMixin):
         stream = StringIO()
         yaml = YAML()
         yaml.dump(result, stream)
-        print(stream.getvalue())
+        console.log(stream.getvalue())
 
     def json(self):
         'get configuration by json format'
         resource = self._get_one_resource_value()
         namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
         result = self._read_namespaced_resource(resource, namespace)
-        print(json.dumps(result, default=dateconverter, indent=4))
+        console.log(json.dumps(result, default=dateconverter, indent=4))
 
     @staticmethod
     def _build_field_selector(selectors):
@@ -98,7 +100,7 @@ class KubeResource(Resource, CmdTaskMixin):
         'get resource namespace'
         resource = self._get_one_resource_value()
         namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
-        print(namespace)
+        console.log(namespace)
 
     def event(self):
         'show event on the resource'
@@ -120,7 +122,7 @@ class KubeResource(Resource, CmdTaskMixin):
             "involvedObject.name": name,
         }
 
-        print(self.client.list_namespaced_event(namespace, field_selector=self._build_field_selector(the_selector)))
+        console.log(self.client.list_namespaced_event(namespace, field_selector=self._build_field_selector(the_selector)))
 
     def _get_config_key_cache_file_name(self):
         main_path = [one for one in self.context['all'][1:] if not one.startswith('-')]
@@ -140,7 +142,7 @@ class KubeResource(Resource, CmdTaskMixin):
     #     'get resource by configuration key'
     #     if 'completion' in self._get_params():
     #         completion = self._get_config_key_completion()
-    #         print(completion)
+    #         console.log(completion)
     #         return
     #
     #     resource = self._get_one_resource_value()
@@ -151,9 +153,9 @@ class KubeResource(Resource, CmdTaskMixin):
     #     the_params = " ".join(params)
     #
     #     if not the_params.strip():
-    #         print(result)
+    #         console.log(result)
     #     else:
-    #         print(ObjectUtils.get_node(result, the_params))
+    #         console.log(ObjectUtils.get_node(result, the_params))
     #
     # def set(self):
     #     'update restore by configuration key'
@@ -179,7 +181,7 @@ class KubeResource(Resource, CmdTaskMixin):
     #
     #     # todo: use apply instead once apply provided
     #     new_result = self.client.replace_namespaced_deployment(resource, namespace, result)
-    #     print(ObjectUtils.get_node(new_result, config_key))
+    #     console.log(ObjectUtils.get_node(new_result, config_key))
     #
     # def delete(self):
     #     'delete node by configuration key'
@@ -275,7 +277,7 @@ class KubeResource(Resource, CmdTaskMixin):
         if resource_name:
             namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource_name)
 
-        print(self.client.describe(self._get_kube_resource_type(), resource_name, namespace))
+        console.log(self.client.describe(self._get_kube_resource_type(), resource_name, namespace))
 
     def relations(self):
         pass

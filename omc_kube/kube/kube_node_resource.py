@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 
 import pkg_resources
+from omc.core import console
 
 from omc.core.decorator import filecache
 
@@ -77,9 +78,9 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         resource = self._get_one_resource_value()
 
         if not resource:
-            print(ObjectUtils.format(result))
+            console.log(ObjectUtils.format(result))
         else:
-            print(ObjectUtils.format(ObjectUtils.get_node(result, resource)))
+            console.log(ObjectUtils.format(ObjectUtils.get_node(result, resource)))
 
     def set(self):
         'update restore by configuration key'
@@ -112,7 +113,7 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         patch_object = StrategicMergePatch.get_instance().gen_strategic_merge_patch(result, config_key.split('.'),
                                                                                     config_value, 'set', [])
         new_result = patch_func(parent_resource, namespace, patch_object)
-        print(new_result)
+        console.log(new_result)
 
     def delete(self):
         'delete node by configuration key'
@@ -144,7 +145,7 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         patch_object = StrategicMergePatch.get_instance().gen_strategic_merge_patch(result, config_key.split('.'),
                                                                                     config_value, 'delete', [])
         new_result = patch_func(parent_resource, namespace, patch_object)
-        print(new_result)
+        console.log(new_result)
 
     def _edit(self):
         'Edit a resource from the default editor.'
@@ -195,4 +196,4 @@ class KubeNodeResource(Resource, CmdTaskMixin):
 
 if __name__ ==  '__main__':
     resource = pkg_resources.resource_filename('omc_kube.deployment', '_deployment_completion.json')
-    print(resource)
+    console.log(resource)

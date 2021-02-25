@@ -1,5 +1,7 @@
 import json
 
+from omc.core import console
+
 from omc_kube.core import StrategicMergePatch
 from omc_kube.kube.kube_resource import KubeResource
 
@@ -15,4 +17,4 @@ class Deployment(KubeResource):
         patch_object = StrategicMergePatch.get_instance().gen_strategic_merge_patch(resource_content, config_key.split('.'),
                                                                                     config_value, 'set', [])
         new_result = patch_func(self._get_one_resource_value(), namespace, patch_object)
-        print(new_result)
+        console.log(new_result)

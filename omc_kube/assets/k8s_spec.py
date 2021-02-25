@@ -4,6 +4,8 @@ import json
 # todo@rain
 # 1. pre-calculate resource spec for strategy patch merge
 # 2. calcuate for resource completion
+from omc.core import console
+
 
 class K8sSpec:
     def __init__(self, spec_file):
@@ -74,7 +76,7 @@ class K8sSpec:
 
 
 def pprint(obj):
-    print(json.dumps(obj, indent=2))
+    console.log(json.dumps(obj, indent=2))
 
 
 if __name__ == '__main__':

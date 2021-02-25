@@ -40,7 +40,7 @@ class Container(Resource, CmdTaskMixin):
 
     def list(self):
         ret = self._list_resource_for_all_namespaces()
-        print(ret)
+        console.log(ret)
 
     def describe(self):
         pass

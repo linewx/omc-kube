@@ -5,6 +5,8 @@ from kubernetes import client, config
 from omc.common import CmdTaskMixin
 from functools import wraps
 
+from omc.core import console
+
 
 def get_obj_value(obj, key):
     # e.g. get pod.data.ips[0]
@@ -491,13 +493,13 @@ class StrategicMergePatch:
 if __name__ == '__main__':
     # client = KubernetesClient("~/.omc/config/kube/nightly1/config")
     # the_namespace = client.get_namespace("service", "smarta-smart-ticket-svc")
-    # print(the_namespace)
+    # console.log(the_namespace)
     #
-    # print(client.list_config_map_for_all_namespaces(watch=False))
-    # print(client.list_pod_for_all_namespaces(watch=False))
-    # print(client.list_deployment_for_all_namespaces(watch=False))
-    # print(client.list_service_for_all_namespaces(watch=False))
-    # print(client.list_endpoints_for_all_namespaces(watch=False))
+    # console.log(client.list_config_map_for_all_namespaces(watch=False))
+    # console.log(client.list_pod_for_all_namespaces(watch=False))
+    # console.log(client.list_deployment_for_all_namespaces(watch=False))
+    # console.log(client.list_service_for_all_namespaces(watch=False))
+    # console.log(client.list_endpoints_for_all_namespaces(watch=False))
     smp = StrategicMergePatch()
     origin = None
     with open('/Users/luganlin/git/mf/omc/omc/assets/k8s/deployment_sample.json') as f:
@@ -505,17 +507,17 @@ if __name__ == '__main__':
     # result = smp.gen_strategic_merge_patch(origin, 'spec.template.spec.containers[0].env[]'.split('.'),
     #                                        {'name': 'name1', 'value': 'value1'}, 'delete', [])
 
-    # # print(json.dumps(result, indent=2))
+    # # console.log(json.dumps(result, indent=2))
     #
     result1 = smp.gen_strategic_merge_patch(origin, 'spec.template.spec.containers[0].livenessProbe'.split('.'),
                                             'value1', 'delete', [])
 
-    print(json.dumps(result1, indent=2))
+    console.log(json.dumps(result1, indent=2))
     value = json.loads('{"command": ["/bin/sh"], "args": ["-c", "while true; do echo hello; sleep 10;done"]}')
     result2 = smp.gen_strategic_merge_patch(origin, 'spec.template.spec.containers[0]'.split('.'),
                                             value, 'set', [])
 
-    print(json.dumps(result2, indent=2))
-    # print(smp.gen_strategic_merge_patch(origin, 'spec.template.spec.containers[0].env',{'name': 'name1', 'value': 'value1'}))
+    console.log(json.dumps(result2, indent=2))
+    # console.log(smp.gen_strategic_merge_patch(origin, 'spec.template.spec.containers[0].env',{'name': 'name1', 'value': 'value1'}))
 
-    # print(json.loads('{"command": ["/bin/sh"], "args": ["-c", "while true; do echo hello; sleep 10;done"]}'))
+    # console.log(json.loads('{"command": ["/bin/sh"], "args": ["-c", "while true; do echo hello; sleep 10;done"]}'))

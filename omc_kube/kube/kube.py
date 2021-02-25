@@ -2,6 +2,7 @@ import os
 
 from omc.common import CmdTaskMixin
 from omc.config import settings
+from omc.core import console
 from omc.core.decorator import filecache
 from omc.core.resource import Resource
 
@@ -44,6 +45,6 @@ if __name__ == '__main__':
     # print(client.read_namespaced_pod("postgres-svc-5685d4bc7-l6j4m", 'default'))
     # print(client.read_namespaced_pod_template("postgres-svc-5685d4bc7-l6j4m", 'default'))
     # print(client.read_namspaced_event("postgres-svc-5685d4bc7-l6j4m", 'default'))
-    print(ret)
+    console.log(ret)
     # for i in ret.items:
     #     print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
