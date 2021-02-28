@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import logging
 
+from omc.common.common_completion import completion_cache, CompletionContent
 from omc.core import console
 from omc.core.decorator import filecache
 
@@ -39,9 +40,9 @@ class KubeResource(Resource, CmdTaskMixin):
         read_func = getattr(self.client, 'read_namespaced_' + self._get_kube_api_resource_type())
         return read_func(name, namespace, **kwargs)
 
-    def _list_resource_for_all_namespaces(self):
+    def _list_resource_for_all_namespaces(self, *args, **kwargs):
         list_func = getattr(self.client, 'list_%s_for_all_namespaces' % self._get_kube_api_resource_type())
-        return list_func()
+        return list_func(*args, **kwargs)
 
     def _get_resource(self):
         resource = self._get_one_resource_value()
@@ -52,17 +53,17 @@ class KubeResource(Resource, CmdTaskMixin):
         resource = self._get_one_resource_value()
         return self.client.get_namespace(self._get_kube_api_resource_type(), resource)
 
-    @filecache(duration=60 * 60, file=Resource._get_cache_file_name)
+    @completion_cache(duration=60 * 60, file=Resource._get_cache_file_name)
     def _completion(self, short_mode=True):
         results = []
         results.append(super()._completion(False))
 
         if not self._have_resource_value():
-            ret = self._list_resource_for_all_namespaces()
+            ret = self._list_resource_for_all_namespaces(timeout_seconds=settings.COMPETION_TIMEOUT)
             results.extend(
                 self._get_completion([ObjectUtils.get_node(one, 'metadata.name') for one in ret.get('items')], True))
 
-        return "\n".join(results)
+        return CompletionContent(results)
 
     def list(self):
         'display one or more resources'

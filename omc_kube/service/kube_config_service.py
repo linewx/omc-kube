@@ -2,7 +2,8 @@ import os
 import shutil
 
 from omc.common import CmdTaskMixin
-from omc.utils import file_utils, console
+from omc.core import console
+from omc.utils import file_utils
 from omc.utils.object_utils import ObjectUtils
 
 
