@@ -1,6 +1,7 @@
 import os
 
 from omc.common import CmdTaskMixin
+from omc.common.common_completion import CompletionContent
 from omc.config import settings
 from omc.core import console
 from omc.core.decorator import filecache
@@ -13,16 +14,14 @@ class Kube(Resource, CmdTaskMixin):
     def _description(self):
         return 'The Kubernetes command-line tool'
 
-    @filecache(duration=-1, file=Resource._get_cache_file_name)
-    def _completion(self, short_mode=True):
-        results = []
-        results.append(super()._completion(False))
-        if not self._have_resource_value():
-            if os.path.exists(settings.OMC_KUBE_CONFIG_DIR):
-                resources = os.listdir(settings.OMC_KUBE_CONFIG_DIR)
-                results.append("\n".join(self._get_completion(resources, True)))
 
-        return "\n".join(results)
+    def _resource_completion(self, short_mode=True):
+        results = []
+        if os.path.exists(settings.OMC_KUBE_CONFIG_DIR):
+            resources = os.listdir(settings.OMC_KUBE_CONFIG_DIR)
+            results.append("\n".join(self._get_completion(resources, True)))
+
+        return CompletionContent(results)
 
     def _before_sub_resource(self):
         try:

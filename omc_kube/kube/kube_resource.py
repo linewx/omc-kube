@@ -123,89 +123,22 @@ class KubeResource(Resource, CmdTaskMixin):
             "involvedObject.name": name,
         }
 
-        console.log(self.client.list_namespaced_event(namespace, field_selector=self._build_field_selector(the_selector)))
+        console.log(
+            self.client.list_namespaced_event(namespace, field_selector=self._build_field_selector(the_selector)))
 
     def _get_config_key_cache_file_name(self):
         main_path = [one for one in self.context['all'][1:] if not one.startswith('-')]
         cache_file = os.path.join(settings.OMC_COMPLETION_CACHE_DIR, *main_path)
         return cache_file
 
-    @filecache(duration=60 * 5, file=_get_config_key_cache_file_name)
+    @completion_cache(duration=60 * 5, file=_get_config_key_cache_file_name)
     def _get_config_key_completion(self):
         resource = self._get_one_resource_value()
         namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
         result = self._read_namespaced_resource(resource, namespace)
         prompts = []
         ObjectUtils.get_nodes(result.to_dict(), prompts)
-        return '\n'.join(self._get_completion(prompts))
-
-    # def get(self):
-    #     'get resource by configuration key'
-    #     if 'completion' in self._get_params():
-    #         completion = self._get_config_key_completion()
-    #         console.log(completion)
-    #         return
-    #
-    #     resource = self._get_one_resource_value()
-    #     namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
-    #     result = self._read_namespaced_resource(resource, namespace)
-    #     params = self._get_action_params()
-    #
-    #     the_params = " ".join(params)
-    #
-    #     if not the_params.strip():
-    #         console.log(result)
-    #     else:
-    #         console.log(ObjectUtils.get_node(result, the_params))
-    #
-    # def set(self):
-    #     'update restore by configuration key'
-    #     if 'completion' in self._get_params():
-    #         resource = self._get_one_resource_value()
-    #         namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
-    #         result = self._read_namespaced_resource(resource, namespace)
-    #         prompts = []
-    #         ObjectUtils.get_nodes(result.to_dict(), prompts)
-    #         self._print_completion(prompts)
-    #         return
-    #
-    #     resource = self._get_one_resource_value()
-    #     namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
-    #     result = self._read_namespaced_resource(resource, namespace)
-    #     params = self._get_action_params()
-    #     config_key = params[0]
-    #     config_value = params[1]
-    #     orig_value = ObjectUtils.get_node(result, config_key)
-    #     # convert type
-    #     config_value = type(orig_value)(config_value)
-    #     set_obj_value(result, config_key, config_value)
-    #
-    #     # todo: use apply instead once apply provided
-    #     new_result = self.client.replace_namespaced_deployment(resource, namespace, result)
-    #     console.log(ObjectUtils.get_node(new_result, config_key))
-    #
-    # def delete(self):
-    #     'delete node by configuration key'
-    #     # todo@rain: to support delete entired resource and completion cache
-    #     if 'completion' in self._get_params():
-    #         resource = self._get_one_resource_value()
-    #         namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
-    #         result = self._read_namespaced_resource(resource, namespace)
-    #         prompts = []
-    #         ObjectUtils.get_nodes(result.to_dict(), prompts)
-    #         self._print_completion(prompts)
-    #         return
-    #
-    #     resource = self._get_one_resource_value()
-    #     namespace = self.client.get_namespace(self._get_kube_api_resource_type(), resource)
-    #     result = self._read_namespaced_resource(resource, namespace)
-    #     params = self._get_action_params()
-    #     config_key = params[0]
-    #     # convert type
-    #     ObjectUtils.delete_node(result, config_key)
-    #
-    #     # todo: use apply instead once apply provided
-    #     new_result = self.client.replace_namespaced_deployment(resource, namespace, result)
+        return CompletionContent(self._get_completion(prompts))
 
     def edit(self):
         'Edit a resource from the default editor.'

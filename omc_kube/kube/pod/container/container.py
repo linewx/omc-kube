@@ -1,10 +1,11 @@
 import argparse
 
+from omc.common.common_completion import CompletionContent
 from omc.core.decorator import filecache
 
 from omc.common import CmdTaskMixin
 
-from omc.core import Resource
+from omc.core import Resource, console
 from omc.utils.object_utils import ObjectUtils
 
 
@@ -24,19 +25,16 @@ class Container(Resource, CmdTaskMixin):
         list_func = getattr(self.client, 'list_%s_for_all_namespaces' % self._get_kube_resource_type())
         return list_func()
 
-    @filecache(duration=60 * 60, file=Resource._get_cache_file_name)
-    def _completion(self, short_mode=True):
+    def _resource_completion(self, short_mode=True):
         results = []
-        results.append(super()._completion(True))
 
-        if not self._have_resource_value():
-            pod_name = self._get_one_resource_value('pod')
-            namespace = self.client.get_namespace('pod', pod_name)
-            result = self.client.read_namespaced_pod(pod_name, namespace)
-            # for one_container in result.spec.containers:
-            results.extend(self._get_completion([(one.get('name'),one.get('image')) for one in ObjectUtils.get_node(result, 'spec.containers')], False))
+        pod_name = self._get_one_resource_value('pod')
+        namespace = self.client.get_namespace('pod', pod_name)
+        result = self.client.read_namespaced_pod(pod_name, namespace)
+        # for one_container in result.spec.containers:
+        results.extend(self._get_completion([(one.get('name'),one.get('image')) for one in ObjectUtils.get_node(result, 'spec.containers')], False))
 
-        return '\n'.join(results)
+        return CompletionContent(results)
 
     def list(self):
         ret = self._list_resource_for_all_namespaces()

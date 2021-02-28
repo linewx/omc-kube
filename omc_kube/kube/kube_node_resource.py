@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 
 import pkg_resources
+from omc.common.common_completion import CompletionContent
 from omc.core import console
 
 from omc.core.decorator import filecache
@@ -44,25 +45,19 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         list_func = getattr(self.client, 'list_%s_for_all_namespaces' % self._get_kube_api_resource_type())
         return list_func()
 
-    @filecache(duration=60 * 60, file=Resource._get_cache_file_name)
-    def _completion(self, short_mode=True):
+    def _resource_completion(self, short_mode=True):
         results = []
-        results.append(super()._completion(False))
 
-        if not self._have_resource_value():
-            # parent_resource = self._get_one_resource_value(self._get_kube_resource_type())
-            # namespace = self.client.get_namespace(self._get_kube_api_resource_type(), parent_resource)
+        kube_resource_type = self._get_kube_resource_type()
+        completion_file_name = pkg_resources.resource_filename('omc_kube.assets', '_%(kube_resource_type)s_completion.json' % locals())
+        prompts = []
+        # get_all_dict_Keys(result.to_dict(), prompts)
+        with open(completion_file_name) as f:
+            result = json.load(f)
+            ObjectUtils.get_nodes(result, prompts)
+            results.extend(self._get_completion(prompts))
 
-            kube_resource_type = self._get_kube_resource_type()
-            completion_file_name = pkg_resources.resource_filename('omc_kube.assets', '_%(kube_resource_type)s_completion.json' % locals())
-            prompts = []
-            # get_all_dict_Keys(result.to_dict(), prompts)
-            with open(completion_file_name) as f:
-                result = json.load(f)
-                ObjectUtils.get_nodes(result, prompts)
-                results.extend(self._get_completion(prompts))
-
-        return "\n".join(results)
+        return CompletionContent(results)
 
     @staticmethod
     def _build_field_selector(selectors):
