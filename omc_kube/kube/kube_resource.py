@@ -53,15 +53,11 @@ class KubeResource(Resource, CmdTaskMixin):
         resource = self._get_one_resource_value()
         return self.client.get_namespace(self._get_kube_api_resource_type(), resource)
 
-    @completion_cache(duration=60 * 60, file=Resource._get_cache_file_name)
-    def _completion(self, short_mode=True):
+    def _resource_completion(self, short_mode=True):
         results = []
-        results.append(super()._completion(False))
-
-        if not self._have_resource_value():
-            ret = self._list_resource_for_all_namespaces(timeout_seconds=settings.COMPETION_TIMEOUT)
-            results.extend(
-                self._get_completion([ObjectUtils.get_node(one, 'metadata.name') for one in ret.get('items')], True))
+        ret = self._list_resource_for_all_namespaces(timeout_seconds=settings.COMPETION_TIMEOUT)
+        results.extend(
+            self._get_completion([ObjectUtils.get_node(one, 'metadata.name') for one in ret.get('items')], True))
 
         return CompletionContent(results)
 
