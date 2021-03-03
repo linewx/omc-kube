@@ -31,6 +31,7 @@ class Service(KubeResource):
 
     def _resource_completion(self, short_mode=True):
         ret = self._list_resource_for_all_namespaces(timeout_seconds=settings.COMPETION_TIMEOUT)
+
         results = Formatter.format_completions(
             [(ObjectUtils.get_node(one, 'metadata.name'),
               ObjectUtils.get_node(one, 'metadata.namespace'),
