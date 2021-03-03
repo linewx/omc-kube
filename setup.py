@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 install_requires = [
     'omc>=0.2.3',
     'kubernetes>=11.0.0',
+    'humanize>=3.1.0'
 ]
 
 setup(
