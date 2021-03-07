@@ -6,9 +6,8 @@ import logging
 
 from omc.common.common_completion import completion_cache, CompletionContent
 from omc.common.formatter import Formatter
-from omc.common.resource_decorator import resource_instance_action
 from omc.core import console
-from omc.core.decorator import filecache
+from omc.core.decorator import filecache, resource_instance_action, resource_class_action
 
 from omc.config import settings
 from omc.utils.object_utils import ObjectUtils
@@ -74,6 +73,7 @@ class KubeResource(Resource, CmdTaskMixin):
 
         return CompletionContent(Formatter.format_completions(results))
 
+    @resource_class_action
     def list(self):
         'display one or more resources'
         resource_name = self._get_one_resource_value()
@@ -85,6 +85,7 @@ class KubeResource(Resource, CmdTaskMixin):
         result = self.client.get(self._get_kube_resource_type(), resource_name, namespace)
         console.log(result)
 
+    @resource_instance_action
     def yaml(self):
         'get configuration in yaml format'
         resource = self._get_one_resource_value()
@@ -106,6 +107,7 @@ class KubeResource(Resource, CmdTaskMixin):
     @staticmethod
     def _build_field_selector(selectors):
         return ','.join(['%s=%s' % (k, v) for (k, v) in selectors.items()])
+
 
     def namespace(self):
         'get resource namespace'
