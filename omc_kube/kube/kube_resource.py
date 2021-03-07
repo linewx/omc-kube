@@ -1,9 +1,12 @@
 import json
 import os
+import re
 from datetime import datetime
 import logging
 
 from omc.common.common_completion import completion_cache, CompletionContent
+from omc.common.formatter import Formatter
+from omc.common.resource_decorator import resource_instance_action
 from omc.core import console
 from omc.core.decorator import filecache
 
@@ -54,12 +57,22 @@ class KubeResource(Resource, CmdTaskMixin):
         return self.client.get_namespace(self._get_kube_api_resource_type(), resource)
 
     def _resource_completion(self, short_mode=True):
-        results = []
-        ret = self._list_resource_for_all_namespaces(timeout_seconds=settings.COMPETION_TIMEOUT)
-        results.extend(
-            self._get_completion([ObjectUtils.get_node(one, 'metadata.name') for one in ret.get('items')], True))
+        output = self.client.get(self._get_kube_api_resource_type())
 
-        return CompletionContent(results)
+        results = []
+
+        for one in output.splitlines():
+            # for case like: 'itsma-j6zm1 smarta-sawmeta-dih- 172.16.0.84:31371,172.16.0.84:1444,172.16.0.84:1445  3 more...          4d3h'
+            # one = re.sub(' \+ \d+ more...', '...', one)
+            one_line = one.strip().split(None, maxsplit=3)
+            one_line[0],one_line[1] = one_line[1],one_line[0]
+            results.append(one_line)
+
+        # ret = self._list_resource_for_all_namespaces(timeout_seconds=settings.COMPETION_TIMEOUT)
+        # results.extend(
+        #     self._get_completion([ObjectUtils.get_node(one, 'metadata.name') for one in ret.get('items')], True))
+
+        return CompletionContent(Formatter.format_completions(results))
 
     def list(self):
         'display one or more resources'
@@ -82,6 +95,7 @@ class KubeResource(Resource, CmdTaskMixin):
         yaml.dump(result, stream)
         console.log(stream.getvalue())
 
+    @resource_instance_action
     def json(self):
         'get configuration by json format'
         resource = self._get_one_resource_value()
