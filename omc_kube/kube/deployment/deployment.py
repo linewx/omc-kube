@@ -13,6 +13,9 @@ from omc_kube.utils import time_util
 
 
 class Deployment(KubeResource):
+    """
+    manages a replicated application, typically by running Pods with no local state
+    """
     def pause(self):
         resource_content = self._get_resource()
         namespace = self._get_namespace()

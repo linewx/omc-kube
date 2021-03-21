@@ -10,8 +10,8 @@ from omc.core.decorator import filecache
 
 from omc.config import settings
 from omc.utils.object_utils import ObjectUtils
-from ruamel.yaml import YAML
-from ruamel.yaml.compat import StringIO
+from ruamel_yaml import YAML
+from ruamel_yaml.compat import StringIO
 
 from omc.common import CmdTaskMixin
 from omc.core.resource import Resource
@@ -49,7 +49,8 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         results = []
 
         kube_resource_type = self._get_kube_resource_type()
-        completion_file_name = pkg_resources.resource_filename('omc_kube.assets', '_%(kube_resource_type)s_completion.json' % locals())
+        completion_file_name = pkg_resources.resource_filename('omc_kube.assets',
+                                                               '_%(kube_resource_type)s_completion.json' % locals())
         prompts = []
         # get_all_dict_Keys(result.to_dict(), prompts)
         with open(completion_file_name) as f:
@@ -189,6 +190,7 @@ class KubeNodeResource(Resource, CmdTaskMixin):
         else:
             raise Exception("no config file found")
 
-if __name__ ==  '__main__':
+
+if __name__ == '__main__':
     resource = pkg_resources.resource_filename('omc_kube.deployment', '_deployment_completion.json')
     console.log(resource)

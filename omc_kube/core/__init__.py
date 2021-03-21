@@ -90,7 +90,7 @@ class KubernetesClient(CmdTaskMixin):
         cmd = 'kubectl %(config)s exec %(interactive_option)s %(resource_type)s/%(resource_name)s %(container_options)s --namespace %(namespace)s -- %(command)s' % locals()
         return self.run_cmd(cmd, capture_output=capture_output)
 
-    def get(self, resource_type, resource_name='', namespace='all', output='yaml'):
+    def get(self, resource_type, resource_name='', namespace='all', output='yaml',timeout=None):
         resource_type = self.reconcile_resource_type(resource_type)
         resource_name = '' if not resource_name else resource_name
         config = ' --kubeconfig %s ' % self.config_file if self.config_file else ''
@@ -103,7 +103,7 @@ class KubernetesClient(CmdTaskMixin):
         output_options = '' if not output else '-o ' + output
 
         cmd = 'kubectl %(config)s get %(resource_type)s %(resource_name)s %(namespace_options)s -o wide' % locals()
-        result = self.run_cmd(cmd, capture_output=True, verbose=False)
+        result = self.run_cmd(cmd, capture_output=True, verbose=False, timeout=timeout)
         return result.stdout.decode('UTF-8')
 
     def describe(self, resource_type, resource_name=None, namespace='all'):

@@ -5,8 +5,9 @@ from omc_kube.kube.kube_resource import KubeResource
 
 
 class Pv(KubeResource):
-    '''kubenetes persistent volumns'''
-    pass
+    """
+    PersistentVolume (PV) is a piece of storage in the cluster that has been provisioned by an administrator or dynamically provisioned using Storage Classes
+    """
 
     def _resource_completion(self, short_mode=True):
         output = self.client.get(self._get_kube_api_resource_type())

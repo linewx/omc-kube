@@ -11,8 +11,8 @@ from omc.core.decorator import filecache, resource_instance_action, resource_cla
 
 from omc.config import settings
 from omc.utils.object_utils import ObjectUtils
-from ruamel.yaml import YAML
-from ruamel.yaml.compat import StringIO
+from ruamel_yaml import YAML
+from ruamel_yaml.compat import StringIO
 
 from omc.common import CmdTaskMixin
 from omc.core.resource import Resource
@@ -56,7 +56,7 @@ class KubeResource(Resource, CmdTaskMixin):
         return self.client.get_namespace(self._get_kube_api_resource_type(), resource)
 
     def _resource_completion(self, short_mode=True):
-        output = self.client.get(self._get_kube_api_resource_type())
+        output = self.client.get(self._get_kube_api_resource_type(), timeout=3)
 
         results = []
 

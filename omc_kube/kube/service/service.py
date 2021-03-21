@@ -7,6 +7,9 @@ from omc_kube.kube.kube_resource import KubeResource
 
 
 class Service(KubeResource):
+    """
+    an abstract way to expose an application running on a set of Pods as a network service
+    """
     def _build_ports(self, ports):
         if not ports:
             return ''
@@ -29,17 +32,17 @@ class Service(KubeResource):
         else:
             return ''
 
-    def _resource_completion(self, short_mode=True):
-        ret = self._list_resource_for_all_namespaces(timeout_seconds=settings.COMPETION_TIMEOUT)
-
-        results = Formatter.format_completions(
-            [(ObjectUtils.get_node(one, 'metadata.name'),
-              ObjectUtils.get_node(one, 'metadata.namespace'),
-              ObjectUtils.get_node(one, 'spec.type'),
-              ObjectUtils.get_node(one, 'spec.clusterIP'),
-              self._build_ports(ObjectUtils.get_node(one, 'spec.ports')),
-              self._build_selector(ObjectUtils.get_node(one, 'spec.selector')),
-              )
-             for one in ret.get('items')])
-
-        return CompletionContent(results)
+    # def _resource_completion(self, short_mode=True):
+    #     ret = self._list_resource_for_all_namespaces(timeout_seconds=settings.COMPETION_TIMEOUT)
+    #
+    #     results = Formatter.format_completions(
+    #         [(ObjectUtils.get_node(one, 'metadata.name'),
+    #           ObjectUtils.get_node(one, 'metadata.namespace'),
+    #           ObjectUtils.get_node(one, 'spec.type'),
+    #           ObjectUtils.get_node(one, 'spec.clusterIP'),
+    #           self._build_ports(ObjectUtils.get_node(one, 'spec.ports')),
+    #           self._build_selector(ObjectUtils.get_node(one, 'spec.selector')),
+    #           )
+    #          for one in ret.get('items')])
+    #
+    #     return CompletionContent(results)
